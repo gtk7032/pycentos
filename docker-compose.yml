@@ -1,0 +1,10 @@
+version: '3'
+services:
+  hoge:
+    container_name: hoge
+    image: hoge
+    restart: always
+    build: .
+    tty: true
+    volumes:
+      - .:/usr/local/hoge
