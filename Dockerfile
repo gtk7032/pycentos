@@ -5,7 +5,6 @@ FROM centos:centos8.4.2105
 # RUN update-ca-trust extract
 
 ARG VER=3.10.13
-ARG PRE=3.10
 
 RUN cd /usr/local \
     && cat /etc/yum.repos.d/CentOS-Linux-BaseOS.repo | sed -i '/^mirrorlist/c baseurl=http://vault.centos.org/$contentdir/$releasever/BaseOS/$basearch/os/' /etc/yum.repos.d/CentOS-Linux-BaseOS.repo \
@@ -20,16 +19,18 @@ RUN cd /usr/local \
     && ./configure --enable-shared \
     && make \
     && make install \
-    && x=$(find /lib64/ -name "libpython${PRE}*") \
-    && ln -s /usr/local/lib/${x} /lib64/${x} \
+    && echo PATH=/usr/local/Python-${VER}':$PATH' >>~/.bash_profile \
+    && echo 'export PATH' >>~/.bash_profile \
+    && ln -s /usr/local/lib/libpython3.10.so.1.0 /lib64/libpython3.10.so.1.0 \
     && dnf clean all
 
 ARG PRJ=hoge
 ARG PRJ_DIR=/usr/local/${PRJ}
 COPY ./requirements.txt /tmp
 RUN mkdir -p ${PRJ_DIR} \
-    && cd ${PRJ_DIR} \ 
-    && /usr/local/Python-${VER}/bin/pip installl -r /tmp/requirements.txt --no-cache-dir \
+    && cd ${PRJ_DIR} \
+    && source ~/.bash_profile \
+    && python -m pip install -r /tmp/requirements.txt --no-cache-dir \
     && rm -f /tmp/requirements.txt
 
 WORKDIR "$PRJ_DIR"
