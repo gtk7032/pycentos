@@ -7,8 +7,8 @@ FROM centos:centos8.4.2105
 ARG VER=3.10.13
 
 RUN cd /usr/local \
-    && cat /etc/yum.repos.d/CentOS-Linux-BaseOS.repo | sed -i '/^mirrorlist/c baseurl=http://vault.centos.org/$contentdir/$releasever/BaseOS/$basearch/os/' /etc/yum.repos.d/CentOS-Linux-BaseOS.repo \
-    && cat /etc/yum.repos.d/CentOS-Linux-AppStream.repo | sed -i '/^mirrorlist/c baseurl=http://vault.centos.org/$contentdir/$releasever/AppStream/$basearch/os/' /etc/yum.repos.d/CentOS-Linux-AppStream.repo \
+    && sed -i '/^mirrorlist/c baseurl=http://vault.centos.org/$contentdir/$releasever/BaseOS/$basearch/os/' /etc/yum.repos.d/CentOS-Linux-BaseOS.repo \
+    && sed -i '/^mirrorlist/c baseurl=http://vault.centos.org/$contentdir/$releasever/AppStream/$basearch/os/' /etc/yum.repos.d/CentOS-Linux-AppStream.repo \
     && dnf update -y \ 
     && dnf groupinstall -y "development tools" \
     && dnf install -y bzip2-devel gdbm-devel libffi-devel libuuid-devel ncurses-devel openssl-devel readline-devel sqlite-devel xz-devel zlib-devel \
