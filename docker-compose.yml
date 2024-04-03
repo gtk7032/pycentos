@@ -1,10 +1,10 @@
 version: '3'
 services:
-  hoge:
-    container_name: hoge
-    image: hoge
+  pycentos:
+    container_name: pycentos
+    image: pycentos
     restart: always
     build: .
     tty: true
     volumes:
-      - .:/usr/local/hoge
+      - .:/usr/local/pycentos

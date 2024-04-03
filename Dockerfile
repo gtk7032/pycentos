@@ -19,17 +19,15 @@ RUN cd /usr/local \
     && ./configure --enable-shared \
     && make \
     && make install \
-    && echo PATH=/usr/local/Python-${VER}':$PATH' >>~/.bash_profile \
-    && echo 'export PATH' >>~/.bash_profile \
     && ln -s /usr/local/lib/libpython3.10.so.1.0 /lib64/libpython3.10.so.1.0 \
     && dnf clean all
 
-ARG PRJ=hoge
+ENV PATH="/usr/local/Python-$VER:$PATH"
+ARG PRJ=pycentos
 ARG PRJ_DIR=/usr/local/${PRJ}
 COPY ./requirements.txt /tmp
 RUN mkdir -p ${PRJ_DIR} \
     && cd ${PRJ_DIR} \
-    && source ~/.bash_profile \
     && python -m pip install -r /tmp/requirements.txt --no-cache-dir \
     && rm -f /tmp/requirements.txt
 
